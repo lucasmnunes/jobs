@@ -9,6 +9,7 @@ import com.poll.api.dto.PollDTO;
 import com.poll.api.entity.Poll;
 import com.poll.api.exception.poll.PollNotFoundException;
 import com.poll.api.repository.PollRepository;
+import com.poll.api.repository.PollSessionRepository;
 import com.poll.api.rule.poll.RuleCheckIsPossibleDeletePoll;
 import com.poll.api.rule.poll.RuleCheckPollExists;
 
@@ -16,19 +17,14 @@ import com.poll.api.rule.poll.RuleCheckPollExists;
 public class PollService {
 
 	private final PollRepository repository;
-	
-	private PollSessionService pollSessionService;
+	private final PollSessionRepository pollSessionRepository;
 	
 	@Autowired
-	public PollService(PollRepository repository) {
+	public PollService(PollRepository repository, PollSessionRepository pollSessionRepository) {
 		this.repository = repository;
+		this.pollSessionRepository = pollSessionRepository;
 	}
 	
-	@Autowired
-	public void setPollSessionService(PollSessionService pollSessionService) {
-		this.pollSessionService = pollSessionService;
-	}
-
 	public List<Poll> findAll() {
 		return repository.findAll();
 	}
@@ -51,7 +47,7 @@ public class PollService {
 	
 	public void deleteById(Long id) {
 		Poll poll = findById(id);
-		RuleCheckIsPossibleDeletePoll.process(poll, pollSessionService.findByPoll(id));
+		RuleCheckIsPossibleDeletePoll.process(poll, pollSessionRepository.findByPollId(id));
 		repository.delete(poll);
 	}
 	
