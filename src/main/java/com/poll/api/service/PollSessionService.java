@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.poll.api.dto.PollDTO;
 import com.poll.api.dto.request.PollSessionRequestDTO;
@@ -37,19 +38,30 @@ public class PollSessionService {
 		this.pollingRepository = pollingRepository;
 	}
 
+	@Transactional(readOnly = true)
 	public PollSession findById(Long id) {
 		return repository.findById(id).orElseThrow(() -> new PollSessionNotFoundException(id));
 	}
 	
+	@Transactional(readOnly = true)
 	public List<PollSession> findByPoll(Long pollId) {
 		return repository.findByPollId(pollId);
 	}
 	
+	@Transactional(readOnly = false)
 	public PollSession save(PollSessionRequestDTO pollSessionRequestDTO) {
 		Poll poll = pollService.findById(pollSessionRequestDTO.getPollId());
 		return repository.save(createPollSession(poll, pollSessionRequestDTO));
 	}
 
+	@Transactional(readOnly = true)
+	public PollSessionResultDTO findPollSessionDetailsById(Long id) {
+		PollSession pollSession = findById(id);
+		RuleCheckPollSessionIsRunning.process(pollSession);
+
+		return createPollSessionResult(pollSession, pollingRepository.findByPollSessionId(id));
+	}
+	
 	private PollSession createPollSession(Poll poll, PollSessionRequestDTO pollSessionRequestDTO) {
 		LocalDateTime now = LocalDateTime.now();
 		
@@ -58,13 +70,6 @@ public class PollSessionService {
 				.startDate(now)
 				.endDate(RulePollSessionCalculateEndDate.process(pollSessionRequestDTO, now))
 				.build();
-	}
-
-	public PollSessionResultDTO findPollSessionDetailsById(Long id) {
-		PollSession pollSession = findById(id);
-		RuleCheckPollSessionIsRunning.process(pollSession);
-
-		return createPollSessionResult(pollSession, pollingRepository.findByPollSessionId(id));
 	}
 	
 	private PollSessionResultDTO createPollSessionResult(PollSession pollSession, List<Polling> pollings) {

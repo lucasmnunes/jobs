@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.poll.api.dto.PollDTO;
 import com.poll.api.entity.Poll;
@@ -25,30 +26,34 @@ public class PollService {
 		this.pollSessionRepository = pollSessionRepository;
 	}
 	
+	@Transactional(readOnly = true)
 	public List<Poll> findAll() {
 		return repository.findAll();
 	}
 
+	@Transactional(readOnly = true)
 	public Poll findById(Long id) {
 		return repository.findById(id).orElseThrow(() -> new PollNotFoundException(id));
 	}
 	
+	@Transactional(readOnly = false)
 	public Poll save(PollDTO pollDTO) {
 		RuleCheckPollExists.process(repository.findByName(pollDTO.getName()));
 		return repository.save(createPoll(pollDTO));
 	}
 
+	@Transactional(readOnly = false)
+	public void deleteById(Long id) {
+		Poll poll = findById(id);
+		RuleCheckIsPossibleDeletePoll.process(poll, pollSessionRepository.findByPollId(id));
+		repository.delete(poll);
+	}
+	
 	private Poll createPoll(PollDTO pollDTO) {
 		return Poll.builder()
 				.name(pollDTO.getName())
 				.description(pollDTO.getDescription())
 				.build();
-	}
-	
-	public void deleteById(Long id) {
-		Poll poll = findById(id);
-		RuleCheckIsPossibleDeletePoll.process(poll, pollSessionRepository.findByPollId(id));
-		repository.delete(poll);
 	}
 	
 }

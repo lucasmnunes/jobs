@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.poll.api.dto.UserDTO;
 import com.poll.api.entity.User;
@@ -22,14 +23,17 @@ public class UserService {
 		this.repository = repository;
 	}
 
+	@Transactional(readOnly = true)
 	public List<User> findAll() {
 		return repository.findAll();
 	}
 
+	@Transactional(readOnly = true)
 	public User findById(Long id) {
 		return repository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
 	}
 	
+	@Transactional(readOnly = false)
 	public User save(UserDTO userDTO) {
 		RuleCheckUserAlreadyExists.process(repository.findByLogin(userDTO.getLogin()));
 		return repository.save(createUser(userDTO));

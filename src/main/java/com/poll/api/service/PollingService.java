@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.poll.api.dto.PollingDTO;
 import com.poll.api.dto.request.PollingVoteRequestDTO;
@@ -31,10 +32,12 @@ public class PollingService {
 		this.userService = userService; 
 	}
 
+	@Transactional(readOnly = true)
 	public List<Polling> findByPollSession(Long pollSessionId) {
 		return repository.findByPollSessionId(pollSessionId);
 	}
 
+	@Transactional(readOnly = false)
 	public PollingDTO save(PollingVoteRequestDTO pollingVoteRequestDTO) {
 		PollSession pollSession = pollSessionService.findById(pollingVoteRequestDTO.getPollSessionId());
 		User user = userService.findById(pollingVoteRequestDTO.getUserId());
