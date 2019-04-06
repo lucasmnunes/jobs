@@ -23,12 +23,10 @@ import com.poll.api.dto.PollDTO;
 import com.poll.api.exception.BusinessException;
 import com.poll.api.service.PollService;
 
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/api/v1/polls")
-@Api(value = "Poll API")
 @CrossOrigin(origins = "*")
 class PollController {
 

@@ -30,9 +30,8 @@ public class SwaggerConfiguration {
     private ApiInfo metaInfo() {
     	return new ApiInfoBuilder()
     			.title("Poll RESTful API")
-    			.description("Poll RESTful API")
     			.version("1.0")
-    			.contact(new Contact("Lucas Nunes", null, "lucas.m.nunes@outlook.com"))
+    			.contact(new Contact("Lucas Nunes", null, null))
     			.build();
     }
 

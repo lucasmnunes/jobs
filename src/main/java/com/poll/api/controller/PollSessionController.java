@@ -24,12 +24,10 @@ import com.poll.api.dto.response.PollSessionResultDTO;
 import com.poll.api.exception.BusinessException;
 import com.poll.api.service.PollSessionService;
 
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/api/v1/sessions")
-@Api(value = "Poll Session API")
 @CrossOrigin(origins = "*")
 class PollSessionController {
 
