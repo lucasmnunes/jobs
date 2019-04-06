@@ -15,13 +15,13 @@ public class PollingVoteRequestDTO implements Serializable {
 
 	private static final long serialVersionUID = 7156264219619737592L;
 
-	@NotNull(message = "Poll Session cannot be null")
+	@NotNull(message = "{polling.pollsession.notempty}")
 	private Long pollSessionId;
 	
-	@NotNull(message = "User cannot be null")
+	@NotNull(message = "{polling.user.notempty}")
 	private Long userId;
 	
-	@NotNull(message = "Vote cannot be null")
+	@NotNull(message = "{polling.vote.notempty}")
 	private VoteOption vote;
 	
 }

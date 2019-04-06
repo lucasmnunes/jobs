@@ -18,11 +18,11 @@ public class PollDTO implements Serializable {
 
 	private Long id;
 	
-	@NotNull(message = "Name cannot be null")
+	@NotNull(message = "{poll.name.notempty}")
 	private String name;
 	
 	@NotNull
-	@Size(min = 5, message = "Description must be at least 5 characters")
+	@Size(min = 5, message = "{poll.description.size}")
 	private String description;
 	
 	public static PollDTO valueOf(Poll poll) {

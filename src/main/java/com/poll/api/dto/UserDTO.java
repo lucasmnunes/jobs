@@ -18,11 +18,11 @@ public class UserDTO implements Serializable {
 
 	private Long id;
 	
-	@NotNull(message = "Name cannot be null")
+	@NotNull(message = "{user.name.notempty}")
 	private String name;
 	
 	@NotNull
-	@Size(min = 5, message = "Login must be at least 5 characters")
+	@Size(min = 5, message = "{user.login.size}")
 	private String login;
 	
 	public static UserDTO valueOf(User user) {

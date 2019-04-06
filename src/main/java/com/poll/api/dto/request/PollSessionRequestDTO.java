@@ -13,7 +13,7 @@ public class PollSessionRequestDTO implements Serializable {
 
 	private static final long serialVersionUID = 8441156320104607455L;
 
-	@NotNull(message = "Poll cannot be null")
+	@NotNull(message = "{pollsession.poll.notempty}")
 	private Long pollId;
 
 	private Integer duration;
