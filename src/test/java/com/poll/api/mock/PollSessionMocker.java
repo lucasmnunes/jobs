@@ -5,6 +5,7 @@ import static java.util.Collections.singletonList;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,5 +44,7 @@ public abstract class PollSessionMocker {
 	public static final Optional<PollSession> ENTITY_OPTIONAL = Optional.of(ENTITY);
 	
 	public static final List<PollSession> LIST = singletonList(ENTITY);
+	
+	public static final List<PollSession> EMPTY_LIST = new ArrayList<>();
 	
 }

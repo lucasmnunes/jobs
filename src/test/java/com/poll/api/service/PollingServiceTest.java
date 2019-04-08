@@ -1,6 +1,8 @@
 package com.poll.api.service;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.junit.Before;
@@ -14,6 +16,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.poll.api.entity.Polling;
 import com.poll.api.exception.session.PollSessionExpiredException;
+import com.poll.api.mock.PollMocker;
 import com.poll.api.mock.PollSessionMocker;
 import com.poll.api.mock.PollingMocker;
 import com.poll.api.mock.PollingVoteRequestMocker;
@@ -46,14 +49,14 @@ public class PollingServiceTest {
 		when(repository.save(any(Polling.class))).thenReturn(PollingMocker.ENTITY);
 		when(pollSessionService.findById(PollSessionMocker.ID)).thenReturn(PollSessionMocker.ENTITY);
 		when(userService.findById(UserMocker.ID)).thenReturn(UserMocker.ENTITY);
+		when(pollService.findById(PollMocker.ID)).thenReturn(PollMocker.ENTITY);
 	}
 
-	/*@Test
-	public void givenPollId_whenFindByPoll_thenCallRepositoryOnce() {
-		when(pollService.findById(PollMocker.ID)).thenReturn(PollMocker.DTO);
-		service.findByPoll(PollMocker.ID);
-		verify(repository, times(1)).findByPollId(PollMocker.ID);
-	}*/
+	@Test
+	public void givenPollSessionId_whenFindByPollSession_thenCallRepositoryOnce() {
+		service.findByPollSession(PollSessionMocker.ID);
+		verify(repository, times(1)).findByPollSessionId(PollSessionMocker.ID);
+	}
 
 	@Test(expected = PollSessionExpiredException.class)
 	public void givenPolling_whenSave_thenCallRepositoryAndReturnPolling() {

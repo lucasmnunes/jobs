@@ -15,7 +15,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.poll.api.entity.Poll;
 import com.poll.api.mock.PollMocker;
+import com.poll.api.mock.PollSessionMocker;
 import com.poll.api.repository.PollRepository;
+import com.poll.api.repository.PollSessionRepository;
 
 @RunWith(SpringRunner.class)
 public class PollServiceTest {
@@ -29,11 +31,15 @@ public class PollServiceTest {
 	@Mock
 	private PollSessionService pollSessionService;
 	
+
+	@Mock
+	private PollSessionRepository pollSessionRepository;
+	
 	@Before
     public void setUp() {
         when(repository.findById(PollMocker.ID)).thenReturn(PollMocker.ENTITY_OPTIONAL);
         when(repository.save(any(Poll.class))).thenReturn(PollMocker.ENTITY);
-        when(pollSessionService.findByPoll(PollMocker.ID)).thenReturn(null);
+        when(pollSessionRepository.findByPollId(PollMocker.ID)).thenReturn(PollSessionMocker.EMPTY_LIST);
     }
 	
 	@Test
@@ -54,10 +60,11 @@ public class PollServiceTest {
 		assertEquals("Poll Name", repository.save(PollMocker.ENTITY).getName());
 	}
 	
-	/*@Test
-	public void givenPollId_whenDelete_thenCallRepositoryOnce() {
+	@Test
+	public void givenPollId_whenDelete_thenCallRepositoryOnceAndPollSessionRepositoryOnce() {
 		service.deleteById(PollMocker.ID);    	
-		verify(repository, times(1)).deleteById(PollMocker.ID);
-	}*/
+		verify(repository, times(1)).delete(PollMocker.ENTITY);
+		verify(pollSessionRepository, times(1)).findByPollId(PollMocker.ID);
+	}
 	
 }
