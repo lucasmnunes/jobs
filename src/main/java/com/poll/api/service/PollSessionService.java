@@ -14,6 +14,7 @@ import com.poll.api.entity.PollSession;
 import com.poll.api.exception.session.PollSessionNotFoundException;
 import com.poll.api.repository.PollSessionRepository;
 import com.poll.api.repository.PollingRepository;
+import com.poll.api.rule.session.RuleCheckHasSessionsByPoll;
 import com.poll.api.rule.session.RuleCheckPollSessionIsRunning;
 import com.poll.api.rule.session.RulePollSessionCalculateEndDate;
 
@@ -41,6 +42,8 @@ public class PollSessionService {
 	
 	@Transactional(readOnly = true)
 	public List<PollSession> findByPoll(Long pollId) {
+		List<PollSession> sessions = repository.findByPollId(pollId);
+		RuleCheckHasSessionsByPoll.process(pollService.findById(pollId), sessions);
 		return repository.findByPollId(pollId);
 	}
 	

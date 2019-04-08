@@ -48,7 +48,7 @@ public class PollSessionServiceTest {
 	@Test
 	public void givenPollId_whenFindByPollId_thenCallRepositoryOnce() {
 		service.findByPoll(PollSessionMocker.ID);    	
-		verify(repository, times(1)).findByPollId(PollMocker.ID);
+		verify(repository, times(2)).findByPollId(PollMocker.ID);
 	}
 	
 	@Test
