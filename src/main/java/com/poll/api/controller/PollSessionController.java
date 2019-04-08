@@ -54,7 +54,7 @@ class PollSessionController {
 	}
 	
 	@GetMapping("/{id}/details")
-	@ApiOperation(value = "Return the result of a specific Poll Session")
+	@ApiOperation(value = "Return the complete result of a specific Poll Session")
 	ResponseEntity<PollSessionResultDTO> findPollSessionDetailsById(@PathVariable(value = "id") Long id) {
 		return new ResponseEntity<>(service.findPollSessionDetailsById(id), HttpStatus.OK);
 	}
